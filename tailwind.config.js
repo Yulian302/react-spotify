@@ -6,6 +6,7 @@ module.exports = {
       colors: {
         "background-base": "#1ed760",
         "main-dark": "#121212",
+        silver: "rgb(107 114 128)",
       },
     },
   },
