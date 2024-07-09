@@ -1,8 +1,15 @@
 import { render, screen } from "@testing-library/react"
 import App from "./App"
 
-test("renders learn react link", () => {
+<<<<<<< Updated upstream
+test("renders home page", () => {
   render(<App />)
-  const linkElement = screen.getByText(/j/i)
-  expect(linkElement).toBeInTheDocument()
+  expect(screen.getByText("Home")).toBeInTheDocument()
+=======
+test("renders learn react link", () => {
+	render(<App />)
+	const linkElement = screen.getByText(/j/i)
+	expect(linkElement).toBeInTheDocument()
+>>>>>>> Stashed changes
 })
+
