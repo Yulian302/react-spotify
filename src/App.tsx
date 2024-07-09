@@ -5,7 +5,7 @@ import "./App.css"
 import { AuthenticationGuard } from "./auth/AuthenticationGuard"
 import HomePage from "./pages/home/Home"
 import store from "./redux/store"
-import LoginPage from "./auth/LoginPage"
+import LoginPage from "./auth/login/LoginPage"
 
 interface AuthProvider {
   username: string | null
