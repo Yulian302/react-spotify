@@ -1,38 +1,56 @@
+import { MdErrorOutline } from "react-icons/md"
+import { useDispatch } from "react-redux"
+import { useLocation, useNavigate } from "react-router"
+import Eye from "../../components/svgs/Eye"
+import EyeClosed from "../../components/svgs/EyeClosed"
+import { useAppSelector } from "../../redux/hooks"
 import {
   togglePasswordVisibility,
   toggleRememberMe,
   updatePassword,
+  updatePasswordError,
   updateUsername,
   updateUsernameError,
 } from "../../redux/slices/user/loginSlice"
-import { useDispatch } from "react-redux"
-import { useAppSelector } from "../../redux/hooks"
-import Eye from "../../components/svgs/Eye"
-import EyeClosed from "../../components/svgs/EyeClosed"
-import { useLocation, useNavigate } from "react-router"
+import { isPasswordCorrect, isUsernameCorrect } from "../utils/validators"
 import { useAuth } from "../providers/Auth"
-import { memo } from "react"
-import { isUsernameCorrect } from "../utils/validators"
-import { MdErrorOutline } from "react-icons/md"
-const usernameError = "Username must be longer than 5 characters"
+
 const Form = () => {
   const location = useLocation()
   const dispatch = useDispatch()
   const loginState = useAppSelector((state) => state.login)
+
   const navigate = useNavigate()
   const { login } = useAuth()
   const from = location.state?.from?.pathname || "/"
-  const handleLogin = async () => {
-    await login()
-    navigate(from, { replace: true })
+  const handleLogin = async (e: any) => {
+    e.preventDefault()
+
+    await login(loginState.username, loginState.password)
+
+    // navigate(from, { replace: true })
   }
   const handleUsernameChange = (username: string) => {
     if (isUsernameCorrect(username)) {
       dispatch(updateUsername(username))
+      dispatch(updateUsernameError(""))
     } else {
-      dispatch(updateUsernameError(usernameError))
+      dispatch(
+        updateUsernameError(
+          "Please enter your Spotify username or email address."
+        )
+      )
     }
   }
+  const handlePasswordChange = (password: string) => {
+    if (isPasswordCorrect(password)) {
+      dispatch(updatePassword(password))
+      dispatch(updatePasswordError(""))
+    } else {
+      dispatch(updatePasswordError("Please enter your password."))
+    }
+  }
+
   return (
     <form className="flex flex-col gap-8">
       <div className="flex flex-col gap-2 [&_input]:w-full [&>label]:text-sm [&>label]:flex [&>label]:flex-col [&>label]:gap-2">
@@ -41,14 +59,22 @@ const Form = () => {
           <input
             type="text"
             name="username"
-            className="px-3 py-3  border-silver border-[1.5px] bg-main-dark font-semibold rounded-sm focus:border-[2.5px] focus:border-white"
+            className={`px-3 py-3 ${
+              loginState.usernameError !== ""
+                ? "border-red-600"
+                : "border-silver"
+            } border-[1.5px] bg-main-dark font-semibold rounded-sm ${
+              loginState.usernameError
+                ? "focus:border-none"
+                : "focus:border-[2.5px] focus:border-white"
+            }`}
             onChange={(e) => {
               handleUsernameChange(e.target.value)
             }}
           />
           {loginState.usernameError && (
-            <div className="flex gap-1 font-semibold text-sm">
-              <MdErrorOutline size={30} color="rgb(241, 94, 108)" />
+            <div className="flex gap-1 font-medium text-sm">
+              <MdErrorOutline size={20} color="rgb(241, 94, 108)" />
               <span className="text-error">{loginState.usernameError}</span>
             </div>
           )}
@@ -60,8 +86,14 @@ const Form = () => {
             <input
               type={loginState.isPasswordVisible ? "text" : "password"}
               name="password"
-              className="px-3 py-3 border-silver border-[1.5px] bg-main-dark font-semibold rounded-sm focus:border-[2.5px] focus:border-white"
-              onChange={(e) => dispatch(updatePassword(e.target.value))}
+              className={`px-3 py-3 ${
+                loginState.passwordError ? "border-red-600" : "border-silver"
+              } border-[1.5px] bg-main-dark font-semibold rounded-sm ${
+                loginState.passwordError
+                  ? "focus:border-none"
+                  : "focus:border-[2.5px] focus:border-white"
+              }`}
+              onChange={(e) => handlePasswordChange(e.target.value)}
             />
             <div
               className="absolute inset-y-0 right-2 flex items-center"
@@ -70,6 +102,12 @@ const Form = () => {
               {loginState.isPasswordVisible ? <Eye /> : <EyeClosed />}
             </div>
           </div>
+          {loginState.passwordError && (
+            <div className="flex gap-1 font-medium text-sm">
+              <MdErrorOutline size={20} color="rgb(241, 94, 108)" />
+              <span className="text-error">{loginState.passwordError}</span>
+            </div>
+          )}
         </label>
         {/* button remember me */}
         <div className="flex gap-3 mt-4">
@@ -100,4 +138,4 @@ const Form = () => {
   )
 }
 
-export default memo(Form)
+export default Form

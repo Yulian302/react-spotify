@@ -1,6 +1,6 @@
 import React from "react"
 import { ProtectedRoute } from "./ProtectedRoute"
-import { useAuth } from "./providers/Auth"
+import { useAppSelector } from "../redux/hooks"
 
 type AuthenticationGuardProps = {
   children?: React.ReactElement
@@ -13,8 +13,9 @@ export const AuthenticationGuard: React.FC<AuthenticationGuardProps> = ({
   guardType = "authenticated",
   ...props
 }) => {
-  const { user } = useAuth()
-  const isAllowed = guardType === "authenticated" ? !!user : !user
+  const user = useAppSelector((state) => state.user)
+  const isAllowed =
+    guardType === "authenticated" ? !!user.username : !user.username
   return (
     <ProtectedRoute
       isAllowed={isAllowed}

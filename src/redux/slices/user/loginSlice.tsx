@@ -5,6 +5,7 @@ const initialState: UserLogin & {
   isPasswordVisible: boolean
   emailError: string
   usernameError: string
+  passwordError: string
 } = {
   username: "",
   password: "",
@@ -12,6 +13,7 @@ const initialState: UserLogin & {
   isPasswordVisible: false,
   emailError: "",
   usernameError: "",
+  passwordError: "",
 }
 
 const loginSlice = createSlice({
@@ -24,6 +26,10 @@ const loginSlice = createSlice({
     updateUsernameError: (state, action: PayloadAction<string>) => {
       state.usernameError = action.payload
     },
+    updatePasswordError: (state, action: PayloadAction<string>) => {
+      state.passwordError = action.payload
+    },
+
     updateUsername: (state, action: PayloadAction<string>) => {
       state.username = action.payload
     },
@@ -46,6 +52,7 @@ export const {
   toggleRememberMe,
   updateEmailError,
   updateUsernameError,
+  updatePasswordError,
 } = loginSlice.actions
 
 export default loginSlice.reducer
