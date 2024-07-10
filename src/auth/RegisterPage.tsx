@@ -4,6 +4,7 @@ import { useAppDispatch, useAppSelector } from "../redux/hooks"
 import { MdErrorOutline } from "react-icons/md"
 import { updateEmailError } from "../redux/slices/user/loginSlice"
 import { isEmailCorrect } from "./utils/validators"
+import { useEffect } from "react"
 
 const emailError =
   "This email is invalid. Make sure it's written like example@email.com"
@@ -14,16 +15,21 @@ const RegisterPage = () => {
   const handleNext = () => {}
 
   const handleEmailChange = (email: string) => {
-    if (email === "") {
-      dispatch(updateEmailError(""))
-      return
-    }
     if (!isEmailCorrect(email)) {
       dispatch(updateEmailError(emailError))
     } else {
       dispatch(updateEmailError(""))
     }
   }
+
+  useEffect(() => {
+    const clearFields = () => {
+      dispatch(updateEmailError(""))
+    }
+    return () => {
+      clearFields()
+    }
+  }, [dispatch])
   return (
     <div className="flex justify-center items-start h-screen">
       <div className="flex flex-col items-center justify-start gap-5 mt-6 w-[324px] text-white font-bold h-[100%]">
@@ -57,7 +63,7 @@ const RegisterPage = () => {
                 />
               </label>
               {registerSlice.emailError && (
-                <div className="flex gap-1 font-semibold text-sm">
+                <div className="flex gap-1 font-medium text-sm">
                   <MdErrorOutline size={30} color="rgb(241, 94, 108)" />
                   <span className="text-error">{registerSlice.emailError}</span>
                 </div>

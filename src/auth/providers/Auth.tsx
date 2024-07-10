@@ -1,21 +1,37 @@
 import React from "react"
+import axios from "../../api/axios.config"
+import { useAppDispatch, useAppSelector } from "../../redux/hooks"
+import { setUser } from "../../redux/slices/user/userSlice"
+import Cookies from "universal-cookie"
 
 const AuthContext = React.createContext({
-  user: null,
-  login: () => {},
+  login: (username: string, password: string) => {},
   logout: () => {},
 })
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-  const [user, setUser] = React.useState<any>(null)
-  const login = async () => {
-    setUser({ username: "yulian", password: "3022003" })
+  const dispatch = useAppDispatch()
+  const loginState = useAppSelector((state) => state.login)
+  const login = async (username: string, password: string) => {
+    const response = await axios({
+      method: "POST",
+      url: "/login",
+      data: { username, password },
+    })
+    if (response.status === 200) {
+      new Cookies().set("token", response.data.token)
+      dispatch(
+        setUser({
+          username: loginState.username,
+        })
+      )
+    }
   }
   const logout = async () => {
-    setUser(null)
+    dispatch(setUser(undefined))
   }
   return (
-    <AuthContext.Provider value={{ user, login, logout }}>
+    <AuthContext.Provider value={{ login, logout }}>
       {children}
     </AuthContext.Provider>
   )

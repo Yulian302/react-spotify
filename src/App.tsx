@@ -7,6 +7,7 @@ import HomePage from "./pages/home/Home"
 import store from "./redux/store"
 import LoginPage from "./auth/LoginPage"
 import RegisterPage from "./auth/RegisterPage"
+import { AuthProvider } from "./auth/providers/Auth"
 
 interface AuthProvider {
   username: string | null
@@ -32,20 +33,26 @@ const fakeAuthProvider: AuthProvider = {
 function App() {
   return (
     <Provider store={store}>
-      <BrowserRouter>
-        <Routes>
-          <Route index element={<HomePage />} />
-          <Route element={<AuthenticationGuard />}>
-            <Route path="hello" element={<div>hello</div>} />
-          </Route>
-          <Route element={<AuthenticationGuard guardType="unauthenticated" />}>
-            <Route path="login" element={<LoginPage />} />
-          </Route>
-          <Route element={<AuthenticationGuard guardType="unauthenticated" />}>
-            <Route path="signup" element={<RegisterPage />}></Route>
-          </Route>
-        </Routes>
-      </BrowserRouter>
+      <AuthProvider>
+        <BrowserRouter>
+          <Routes>
+            <Route index element={<HomePage />} />
+            <Route element={<AuthenticationGuard />}>
+              <Route path="hello" element={<div>hello</div>} />
+            </Route>
+            <Route
+              element={<AuthenticationGuard guardType="unauthenticated" />}
+            >
+              <Route path="login" element={<LoginPage />} />
+            </Route>
+            <Route
+              element={<AuthenticationGuard guardType="unauthenticated" />}
+            >
+              <Route path="signup" element={<RegisterPage />}></Route>
+            </Route>
+          </Routes>
+        </BrowserRouter>
+      </AuthProvider>
     </Provider>
   )
 }
