@@ -1,4 +1,4 @@
-import { Link, useLocation } from "react-router-dom"
+import { Link } from "react-router-dom"
 import LoginFooter from "../../components/LoginFooter"
 
 import Logo from "../../components/svgs/Logo"
@@ -6,8 +6,6 @@ import Logo from "../../components/svgs/Logo"
 import Form from "./Form"
 
 function LoginPage() {
-  console.log("render")
-
   return (
     <div className="bgGradient w-screen min-h-screen resize-none flex flex-col justify-start items-center pt-8">
       <div className="flex justify-center items-center text-white font-bold bg-main-dark max-w-[734px] w-[734px] h-5/6 rounded-md">

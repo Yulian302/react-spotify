@@ -3,6 +3,7 @@ import {
   toggleRememberMe,
   updatePassword,
   updateUsername,
+  updateUsernameError,
 } from "../../redux/slices/user/loginSlice"
 import { useDispatch } from "react-redux"
 import { useAppSelector } from "../../redux/hooks"
@@ -11,7 +12,9 @@ import EyeClosed from "../../components/svgs/EyeClosed"
 import { useLocation, useNavigate } from "react-router"
 import { useAuth } from "../providers/Auth"
 import { memo } from "react"
-
+import { isUsernameCorrect } from "../utils/validators"
+import { MdErrorOutline } from "react-icons/md"
+const usernameError = "Username must be longer than 5 characters"
 const Form = () => {
   const location = useLocation()
   const dispatch = useDispatch()
@@ -23,6 +26,13 @@ const Form = () => {
     await login()
     navigate(from, { replace: true })
   }
+  const handleUsernameChange = (username: string) => {
+    if (isUsernameCorrect(username)) {
+      dispatch(updateUsername(username))
+    } else {
+      dispatch(updateUsernameError(usernameError))
+    }
+  }
   return (
     <form className="flex flex-col gap-8">
       <div className="flex flex-col gap-2 [&_input]:w-full [&>label]:text-sm [&>label]:flex [&>label]:flex-col [&>label]:gap-2">
@@ -32,9 +42,18 @@ const Form = () => {
             type="text"
             name="username"
             className="px-3 py-3  border-silver border-[1.5px] bg-main-dark font-semibold rounded-sm focus:border-[2.5px] focus:border-white"
-            onChange={(e) => dispatch(updateUsername(e.target.value))}
+            onChange={(e) => {
+              handleUsernameChange(e.target.value)
+            }}
           />
+          {loginState.usernameError && (
+            <div className="flex gap-1 font-semibold text-sm">
+              <MdErrorOutline size={30} color="rgb(241, 94, 108)" />
+              <span className="text-error">{loginState.usernameError}</span>
+            </div>
+          )}
         </label>
+
         <label>
           Password
           <div className="relative flex">
