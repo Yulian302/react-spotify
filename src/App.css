@@ -43,3 +43,11 @@
 }
 
 
+.formErrorText{
+  font-weight: 500;
+  font-size: 0.875rem /* 14px */;
+  line-height: 1.25rem;
+  span{
+    color: rgb(241 94 108 / var(--tw-text-opacity))
+  }
+}

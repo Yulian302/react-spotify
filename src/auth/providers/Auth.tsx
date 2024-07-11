@@ -25,6 +25,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
           username: loginState.username,
         })
       )
+
     }
   }
   const logout = async () => {
