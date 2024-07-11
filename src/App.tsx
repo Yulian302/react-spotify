@@ -9,27 +9,6 @@ import LoginPage from "./auth/LoginPage"
 import RegisterPage from "./auth/RegisterPage"
 import { AuthProvider } from "./auth/providers/Auth"
 
-interface AuthProvider {
-  username: string | null
-  isAuthenticated: boolean
-  singin(username: string): Promise<void>
-  signout(): Promise<void>
-}
-const fakeAuthProvider: AuthProvider = {
-  username: null,
-  isAuthenticated: false,
-  async singin(username: string): Promise<void> {
-    await new Promise((r) => setTimeout(r, 500))
-    fakeAuthProvider.isAuthenticated = true
-    fakeAuthProvider.username = username
-  },
-  async signout(): Promise<void> {
-    await new Promise((r) => setTimeout(r, 500))
-    fakeAuthProvider.isAuthenticated = false
-    fakeAuthProvider.username = ""
-  },
-}
-
 function App() {
   return (
     <Provider store={store}>
