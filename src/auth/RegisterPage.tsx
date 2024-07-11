@@ -5,6 +5,7 @@ import { MdErrorOutline } from "react-icons/md"
 import { updateEmailError } from "../redux/slices/user/loginSlice"
 import { isEmailCorrect } from "./utils/validators"
 import { useEffect } from "react"
+import { inputStyling } from "./login/Form"
 
 const emailError =
   "This email is invalid. Make sure it's written like example@email.com"
@@ -50,22 +51,14 @@ const RegisterPage = () => {
                   type="text"
                   name="username"
                   placeholder="name@domain.com"
-                  className={`px-3 py-3 ${
-                    registerSlice.emailError
-                      ? "border-red-600"
-                      : "border-silver"
-                  } border-[1.5px] bg-main-dark font-semibold rounded-sm ${
-                    registerSlice.emailError
-                      ? "focus:border-none"
-                      : "focus:border-[2.5px] focus:border-white"
-                  }`}
+                  className={inputStyling(registerSlice.emailError)}
                   onChange={(e) => handleEmailChange(e.target.value)}
                 />
               </label>
               {registerSlice.emailError && (
-                <div className="flex gap-1 font-medium text-sm">
+                <div className="flex gap-1 formErrorText">
                   <MdErrorOutline size={30} color="rgb(241, 94, 108)" />
-                  <span className="text-error">{registerSlice.emailError}</span>
+                  <span>{registerSlice.emailError}</span>
                 </div>
               )}
             </div>

@@ -6,6 +6,7 @@ const initialState: UserLogin & {
   emailError: string
   usernameError: string
   passwordError: string
+  formError: string
 } = {
   username: "",
   password: "",
@@ -14,6 +15,7 @@ const initialState: UserLogin & {
   emailError: "",
   usernameError: "",
   passwordError: "",
+  formError: "",
 }
 
 const loginSlice = createSlice({
@@ -29,7 +31,9 @@ const loginSlice = createSlice({
     updatePasswordError: (state, action: PayloadAction<string>) => {
       state.passwordError = action.payload
     },
-
+    updateFormError: (state, action: PayloadAction<string>) => {
+      state.formError = action.payload
+    },
     updateUsername: (state, action: PayloadAction<string>) => {
       state.username = action.payload
     },
@@ -53,6 +57,7 @@ export const {
   updateEmailError,
   updateUsernameError,
   updatePasswordError,
+  updateFormError,
 } = loginSlice.actions
 
 export default loginSlice.reducer

@@ -14,8 +14,8 @@ export const AuthenticationGuard: React.FC<AuthenticationGuardProps> = ({
   ...props
 }) => {
   const user = useAppSelector((state) => state.user)
-  const isAllowed =
-    guardType === "authenticated" ? !!user.username : !user.username
+
+  const isAllowed = guardType === "authenticated" ? user !== undefined : true
   return (
     <ProtectedRoute
       isAllowed={isAllowed}
