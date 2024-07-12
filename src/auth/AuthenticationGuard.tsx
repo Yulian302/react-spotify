@@ -2,61 +2,63 @@ import React, { Suspense, useEffect, useState } from "react"
 import { useAppDispatch, useAppSelector } from "../redux/hooks"
 import { fetchUserFormCookie } from "../redux/slices/user/userSlice"
 import { ProtectedRoute } from "./ProtectedRoute"
+import { Navigate, useLocation } from "react-router"
 type AuthenticationGuardProps = {
-	children?: React.ReactElement
-	redirectPath?: string
-	guardType?: "authenticated" | "unauthenticated"
+  children?: React.ReactElement
+  redirectPath?: string
+  guardType?: "authenticated" | "unauthenticated"
 }
-
+const isLocationInOpenAuth = (location: string) => {
+  return ["/login", "/signup"].includes(location)
+}
 function AwaitAuthenticationGuard({
-	redirectPath = "/login",
-	guardType = "authenticated",
-	children, // Add children prop
+  redirectPath = "/login",
+  guardType = "authenticated",
+  children,
 }: AuthenticationGuardProps): JSX.Element {
-	// Change return type
-	const dispatch = useAppDispatch()
-	const user = useAppSelector((state) => state.user)
-	const [isLoading, setIsLoading] = useState(true)
+  const dispatch = useAppDispatch()
+  const location = useLocation()
+  const user = useAppSelector((state) => state.user)
+  const [isLoading, setIsLoading] = useState(true)
 
-	useEffect(() => {
-		const fetchUserData = async () => {
-			if (!user.username) {
-				try {
-					await dispatch(fetchUserFormCookie())
-				} catch (error) {
-					console.error("Error fetching user:", error)
-				}
-			}
-			setIsLoading(false)
-		}
+  useEffect(() => {
+    const fetchUserData = async () => {
+      if (!user.username) {
+        try {
+          await dispatch(fetchUserFormCookie())
+        } catch (error) {
+          console.error("Error fetching user:", error)
+        }
+      }
+      setIsLoading(false)
+    }
 
-		if (guardType === "authenticated") {
-			fetchUserData()
-		} else {
-			setIsLoading(false) // Set loading to false for "unauthenticated" guard
-		}
-	}, [dispatch, user.username, guardType])
+    fetchUserData()
+  }, [dispatch, user.username, guardType])
 
-	const isAllowed =
-		guardType === "authenticated" ? user.username !== undefined : true
+  const isAllowed =
+    guardType === "authenticated" ? user.username !== undefined : true
+  if (isAllowed && user.username && isLocationInOpenAuth(location.pathname)) {
+    return <Navigate to={"/"} />
+  }
 
-	if (isLoading) {
-		return <div>Loading...</div> // or any loading indicator
-	}
+  if (isLoading) {
+    return <div>Loading...</div>
+  }
 
-	return (
-		<ProtectedRoute
-			isAllowed={isAllowed}
-			redirectPath={redirectPath}
-			children={children}
-		/>
-	)
+  return (
+    <ProtectedRoute
+      isAllowed={isAllowed}
+      redirectPath={redirectPath}
+      children={children}
+    />
+  )
 }
 
 export const AuthenticationGuard: React.FC<AuthenticationGuardProps> = (
-	props
+  props
 ) => (
-	<Suspense fallback={<div>Loading...</div>}>
-		<AwaitAuthenticationGuard {...props} />
-	</Suspense>
+  <Suspense fallback={<div>Loading...</div>}>
+    <AwaitAuthenticationGuard {...props} />
+  </Suspense>
 )

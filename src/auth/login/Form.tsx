@@ -48,7 +48,7 @@ const Form = () => {
     e.preventDefault()
     try {
       await login(loginState.username, loginState.password)
-      navigate("/hello", { replace: true })
+      navigate("/", { replace: true })
     } catch (error) {
       dispatch(updateFormError("Incorrect username/email or password"))
     }
