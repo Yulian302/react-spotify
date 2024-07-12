@@ -8,7 +8,6 @@ import SearchIconVisited from "../svgs/SearchIconVisited"
 
 const TopLeft = () => {
   const location = useLocation().pathname
-  console.log(location)
   const activeTab = (tab: string) =>
     classNames("font-[700] text-sm", {
       "text-white": location === tab,
@@ -17,7 +16,7 @@ const TopLeft = () => {
   return (
     <div className="flex flex-col h-full justify-center [&>div]:flex-1 gap-4 mx-4">
       <Link
-        to={""}
+        to={"/"}
         className="flex gap-4 [&>span]:hover:text-white [&>svg]:hover:!fill-white"
       >
         {location === "/" ? (
@@ -26,16 +25,19 @@ const TopLeft = () => {
             color={location === "/" ? "white" : "gray"}
           />
         ) : (
-          <HomeIcon size={20} />
+          <HomeIcon size={20} color={location === "/" ? "white" : "gray"} />
         )}
         <span className={activeTab("/")}>Home</span>
       </Link>
       <Link
-        to={"search"}
+        to={"/search"}
         className="flex gap-4 [&>span]:hover:text-white [&>svg]:hover:!fill-white"
       >
         {location === "/search" ? (
-          <SearchIconVisited size={20} />
+          <SearchIconVisited
+            size={20}
+            color={location === "/search" ? "white" : "gray"}
+          />
         ) : (
           <SearchIcon
             size={20}
