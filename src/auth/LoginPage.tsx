@@ -1,7 +1,7 @@
+import { useEffect } from "react"
 import { Link } from "react-router-dom"
 import LoginFooter from "../components/LoginFooter"
 import Logo from "../components/svgs/Logo"
-import Form from "./login/Form"
 import { useAppDispatch } from "../redux/hooks"
 import {
   updatePassword,
@@ -9,7 +9,7 @@ import {
   updateUsername,
   updateUsernameError,
 } from "../redux/slices/user/loginSlice"
-import { useEffect } from "react"
+import Form from "./login/Form"
 
 function LoginPage() {
   const dispatch = useAppDispatch()
