@@ -4,6 +4,11 @@ import "./index.css"
 import App from "./App"
 import reportWebVitals from "./reportWebVitals"
 
+// additional javascript modifications
+document.addEventListener("contextmenu", (event: MouseEvent) =>
+  event.preventDefault()
+)
+
 const root = ReactDOM.createRoot(document.getElementById("root") as HTMLElement)
 
 root.render(

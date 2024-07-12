@@ -1,10 +1,10 @@
-const SearchIconVisited = ({ size }) => {
+const SearchIconVisited = ({ size,color }) => {
   return (
     <svg
       data-encore-id="icon"
       role="img"
       aria-hidden="true"
-      style={{ width: size, height: size }}
+      style={{ width: size, height: size,fill:color }}
       viewBox="0 0 24 24"
     >
       <path d="M15.356 10.558c0 2.623-2.16 4.75-4.823 4.75-2.664 0-4.824-2.127-4.824-4.75s2.16-4.75 4.824-4.75c2.664 0 4.823 2.127 4.823 4.75z"></path>
